@@ -1,19 +1,62 @@
 plugins {
     id 'java'
+    id "com.github.spacialcircumstances.gradle-cucumber-reporting" version "0.1.24"
 }
 
-group = 'org.example'
-version = '1.0-SNAPSHOT'
+group 'com.cucumber-allure-gradle-integration'
+version '1.0-SNAPSHOT'
 
-repositories {
-    mavenCentral()
+def cucumberVersion = '6.11.0'
+
+allprojects {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven { url "https://jitpack.io" }
+    }
 }
+
+
 
 dependencies {
-    testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
+    implementation 'io.cucumber:cucumber-java:' + cucumberVersion
+    implementation 'io.cucumber:cucumber-junit:' + cucumberVersion
+
+    implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+    implementation 'com.google.code.gson:gson:2.8.8'
+    implementation 'com.testdroid:testdroid-api:2.127'
+    implementation 'com.intuit.karate:karate-junit5:1.1.0'
+    implementation 'org.projectlombok:lombok:1.18.20'
+    implementation 'org.projectlombok:lombok:1.18.20'
+    implementation 'org.jetbrains:annotations:20.1.0'
+    testImplementation 'io.cucumber:cucumber-junit:6.10.4'
+    implementation 'net.masterthought:cucumber-reporting:5.6.1'
+    implementation 'com.google.code.gson:gson:2.3.1'
+    implementation 'com.github.javafaker:javafaker:1.0.2'
+    compileOnly 'org.projectlombok:lombok:0.11.0'
+
+    testImplementation 'io.rest-assured:rest-assured:4.4.0'
+    implementation 'io.rest-assured:xml-path:4.4.0'
+    implementation 'io.rest-assured:json-schema-validator:4.4.0'
+    implementation 'io.rest-assured:json-path:4.4.0'
+
+    implementation 'com.networknt:json-schema-validator:1.0.83'
+    testImplementation 'org.testng:testng:7.10.2'
+
+
 }
 
-test {
-    useJUnitPlatform()
+
+configurations {
+    testCompile
+    cucumberRuntime {
+        extendsFrom implementation
+    }
+}
+
+
+cucumberReports {
+    outputDir = file('build/reports/CucumberSpecificReport')
+    buildId = '0'
+    reports = files('build/reports/CucumberSpecificReport/CucumberJson/cucumber.json')
 }
