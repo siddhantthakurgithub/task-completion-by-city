@@ -39,6 +39,7 @@ public class Todos_API {
 
         int totalUsersInFanCodeCity = convertStringToInt(PropertyHandler.readProperty("fanCodeTestData","totalUsersInACity"));
         int totalTodos = convertStringToInt(JSONHelper.getValueAt(responseStringBody, "$.length()"));
+        int expectedCompletionPercent = convertStringToInt(PropertyHandler.readProperty("fanCodeTestData","completionPercent"));
 
         String test = PropertyHandler.readProperty("fanCodeTestData","userIds").replaceAll("[^0-9a-zA-Z, ]", "").replace(" ", "");
         String[] userIdsInFanCodeCity = test.split(",");
@@ -58,7 +59,7 @@ public class Todos_API {
                 }
             }
 
-            if ((completedTasksCounter * 100 / todoTaskCounter) <= 50) {
+            if ((completedTasksCounter * 100 / todoTaskCounter) <= expectedCompletionPercent) {
                 softAssert.fail("\nUser with id " + userIdsInFanCodeCity[i] + " has not completed at least 50% of their tasks.\nCompleted tasks: " + completedTasksCounter + "\nTodo Tasks: " + todoTaskCounter);
 
             }
